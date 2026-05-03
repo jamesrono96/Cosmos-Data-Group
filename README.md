@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmos Data Group Ltd — Navigating Data. Powering Decisions.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Raleway:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #080C18;
+            --navy-mid: #0E1628;
+            --navy-light: #162040;
+            --gold: #D4AA50;
+            --gold-light: #EDD98A;
+            --cream: #F7F3EA;
+            --text-muted: #6A6050;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--navy);
+            color: var(--cream);
+            font-family: 'Raleway', sans-serif;
+            overflow-x: hidden;
+        }
+
+        #stars-canvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 60px;
+            background: rgba(8,12,24,0.9);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(212,170,80,0.15);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .nav-logo-hex { width: 38px; height: 38px; }
+
+        .nav-logo-text {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 14px;
+            color: var(--gold-light);
+            letter-spacing: 3px;
+        }
+
+        .nav-logo-text span {
+            display: block;
+            font-size: 8px;
+            color: var(--gold);
+            letter-spacing: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: rgba(247,243,234,0.7);
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--gold-light); }
+
+        .nav-cta {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            color: var(--navy);
+            background: var(--gold);
+            border: none;
+            padding: 10px 24px;
+            cursor: pointer;
+        }
+
+        .nav-cta:hover { background: var(--gold-light); }
+
+        /* HERO */
+        #hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 40px 80px;
+        }
+
+        .hero-ring {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 1px solid rgba(212,170,80,0.12);
+            animation: pulse-ring 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse-ring {
+            0%, 100% { opacity: 0.3; transform: translate(-50%, -50%) scale(1); }
+            50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.02); }
+        }
+
+        .hero-content { position: relative; z-index: 2; max-width: 920px; }
+
+        .hero-badge {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 11px;
+            letter-spacing: 4px;
+            color: var(--gold);
+            border: 1px solid rgba(212,170,80,0.4);
+            padding: 6px 20px;
+            display: inline-block;
+            margin-bottom: 32px;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: clamp(48px, 8vw, 88px);
+            color: var(--gold-light);
+            letter-spacing: 6px;
+            line-height: 1.05;
+        }
+
+        .hero-title-sub {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: clamp(22px, 4vw, 42px);
+            color: var(--gold);
+            letter-spacing: 10px;
+            margin-bottom: 28px;
+        }
+
+        .hero-desc {
+            font-size: 17px;
+            color: rgba(247,243,234,0.75);
+            line-height: 1.8;
+            max-width: 620px;
+            margin: 0 auto 40px;
+        }
+
+        .btn {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            padding: 15px 38px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .btn-primary:hover { background: var(--gold-light); transform: translateY(-3px); }
+
+        .btn-outline {
+            border: 1px solid rgba(212,170,80,0.6);
+            color: var(--gold-light);
+        }
+
+        .btn-outline:hover { border-color: var(--gold); color: white; }
+
+        /* SECTIONS */
+        section {
+            position: relative;
+            z-index: 1;
+            padding: 100px 60px;
+        }
+
+        .section-label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 5px;
+            color: var(--gold);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(28px, 5vw, 46px);
+            font-weight: 900;
+            color: var(--gold-light);
+            letter-spacing: 3px;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+
+        .section-desc {
+            font-size: 16px;
+            color: rgba(247,243,234,0.7);
+            line-height: 1.85;
+            max-width: 680px;
+        }
+
+        /* VALUES */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .value-card {
+            background: var(--navy-mid);
+            padding: 28px 24px;
+            text-align: center;
+            border-top: 3px solid var(--gold);
+        }
+
+        /* SERVICES */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            background: var(--navy-mid);
+            padding: 36px 30px;
+            transition: all 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            background: var(--navy-light);
+        }
+
+        .service-title {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            color: var(--gold-light);
+            margin: 16px 0 12px;
+        }
+
+        /* APPROACH */
+        .approach-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .step {
+            background: var(--navy-mid);
+            padding: 32px 28px;
+        }
+
+        .step-num {
+            font-family: 'Cinzel', serif;
+            font-size: 42px;
+            color: rgba(212,170,80,0.2);
+            font-weight: 900;
+        }
+
+        /* CONTACT */
+        #contact {
+            background: var(--navy-mid);
+            text-align: center;
+        }
+
+        footer {
+            background: var(--navy);
+            padding: 40px 60px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(247,243,234,0.5);
+        }
+
+        @media (max-width: 900px) {
+            nav { padding: 16px 24px; }
+            .nav-links { display: none; }
+            section { padding: 80px 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="stars-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+    <a href="#hero" class="nav-logo">
+        <svg class="nav-logo-hex" viewBox="0 0 38 38" fill="none">
+            <polygon points="19,2 34,10.5 34,27.5 19,36 4,27.5 4,10.5" fill="#0E1628" stroke="#D4AA50" stroke-width="1.2"/>
+            <polygon points="19,8 28,13 28,23 19,28 10,23 10,13" fill="#162040"/>
+            <polygon points="19,13 24,19 19,25 14,19" fill="#D4AA50"/>
+            <circle cx="19" cy="19" r="3" fill="#080C18"/>
+            <circle cx="19" cy="19" r="1.5" fill="#D4AA50"/>
+        </svg>
+        <div class="nav-logo-text">
+            COSMOS
+            <span>DATA GROUP LTD</span>
+        </div>
+    </a>
+    <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#approach">Approach</a></li>
+        <li><a href="#values">Values</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="nav-cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get In Touch</button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-ring"></div><div class="hero-ring"></div><div class="hero-ring"></div><div class="hero-ring"></div>
+
+    <div class="hero-content">
+        <div class="hero-badge">Nairobi · Kenya</div>
+        <h1 class="hero-title">COSMOS</h1>
+        <h2 class="hero-title-sub">DATA GROUP</h2>
+        <p class="hero-desc">We deliver world-class data intelligence, research, and advisory solutions that empower clients to make decisions grounded in evidence, insight, and foresight.</p>
+        <div>
+            <a href="#services" class="btn btn-primary">Explore Our Services</a>
+            <a href="#contact" class="btn btn-outline" style="margin-left:16px;">Talk To Us</a>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="section-label">Who We Are</div>
+    <h2 class="section-title">Professional Data Intelligence & Advisory Firm</h2>
+    <div class="section-desc">
+        Cosmos Data Group is a professional services and data intelligence firm headquartered in Nairobi, Kenya. We deliver integrated solutions across data science, research, strategic advisory, tax consulting, risk management, and digital intelligence — serving the private sector, public sector, development organisations, and civil society.<br><br>
+        Founded by professionals with expertise in economics, data science, and public policy, we combine rigorous analytical methods with practical East African operating knowledge.
+    </div>
+</section>
+
+<!-- MISSION & VISION -->
+<section style="background:var(--navy-mid);">
+    <div style="max-width:800px; margin:0 auto; text-align:center;">
+        <div class="section-label">Our Mission</div>
+        <p style="font-size:18px; line-height:1.7;">To deliver world-class data intelligence, research, and advisory solutions that empower clients to make decisions grounded in evidence, insight, and foresight.</p>
+        
+        <div style="margin:60px 0 20px; border-top:1px solid rgba(212,170,80,0.2);"></div>
+        
+        <div class="section-label">Our Vision</div>
+        <p style="font-size:18px; line-height:1.7;">To be the most trusted data intelligence and advisory firm in East and Central Africa — the first call for any organisation navigating complex environments.</p>
+    </div>
+</section>
+
+<!-- VALUES -->
+<section id="values">
+    <div class="section-label">Our Values</div>
+    <h2 class="section-title">What Guides Us</h2>
+    <div class="values-grid">
+        <div class="value-card">Precision</div>
+        <div class="value-card">Confidentiality</div>
+        <div class="value-card">Speed</div>
+        <div class="value-card">Independence</div>
+        <div class="value-card">Integrity</div>
+        <div class="value-card">Client-First</div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" style="background:var(--navy-mid);">
+    <div class="section-label">Our Practice Areas</div>
+    <h2 class="section-title">What We Offer</h2>
+
+    <div class="services-grid">
+        <div class="service-card">
+            <div class="service-title">📊 Data Science & Analytics</div>
+            <p>Statistical modelling, predictive intelligence, machine learning & interactive dashboards.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-title">🔬 Research & Surveys</div>
+            <p>Quantitative & qualitative research — household surveys, opinion polling & evidence synthesis.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-title">🧾 Tax Advisory & Compliance</div>
+            <p>KRA compliance, returns preparation, strategic tax planning, dispute resolution & TAT representation.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-title">📈 MEL Systems</div>
+            <p>MEL design, Theory of Change, impact evaluations & donor reporting for USAID, FCDO, EU, UN.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-title">🛡️ Risk & Insurance</div>
+            <p>Enterprise risk assessments, actuarial support, fraud analytics & reinsurance strategy.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-title">🗺️ GIS & Geospatial</div>
+            <p>Thematic mapping, spatial analysis, satellite imagery & field data collection.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-title">🤖 AI & Technology</div>
+            <p>Sentiment analysis, NLP, disinformation detection, chatbot development & intelligent automation.</p>
+        </div>
+        <div class="service-card">
+            <div class="service-title">🌍 Policy & Economics</div>
+            <p>Macroeconomic research, regulatory impact assessments, policy briefs & market entry strategy.</p>
+        </div>
+    </div>
+</section>
+
+<!-- WHO WE SERVE -->
+<section>
+    <div class="section-label">Who We Serve</div>
+    <h2 class="section-title">Our Clients</h2>
+    <div class="section-desc" style="margin-bottom:40px;">
+        We proudly serve a diverse range of organisations across East and Central Africa.
+    </div>
+    <table style="width:100%; border-collapse:collapse; background:var(--navy-mid);">
+        <tr style="background:rgba(212,170,80,0.1);">
+            <th style="padding:18px; text-align:left; border-bottom:1px solid rgba(212,170,80,0.2);">Sector</th>
+            <th style="padding:18px; text-align:left; border-bottom:1px solid rgba(212,170,80,0.2);">How We Help</th>
+        </tr>
+        <tr>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Private Companies & SMEs</td>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Tax compliance, financial analysis, feasibility studies, market research & strategic advisory.</td>
+        </tr>
+        <tr>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">NGOs & Development Orgs</td>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">MEL systems, programme evaluations, baseline surveys & donor reporting.</td>
+        </tr>
+        <tr>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Government & Public Sector</td>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Economic policy analysis, CIDPs, public participation & data infrastructure.</td>
+        </tr>
+        <tr>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Financial Services & Insurance</td>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Risk modelling, actuarial support, fraud analytics & customer intelligence.</td>
+        </tr>
+        <tr>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Development Finance Institutions</td>
+            <td style="padding:18px; border-bottom:1px solid rgba(212,170,80,0.1);">Feasibility studies, economic appraisals, risk assessments & programme evaluations.</td>
+        </tr>
+        <tr>
+            <td style="padding:18px;">Academic & Research Institutions</td>
+            <td style="padding:18px;">Research design, data collection, statistical analysis & publication-ready reporting.</td>
+        </tr>
+    </table>
+</section>
+
+<!-- APPROACH -->
+<section id="approach" style="background:var(--navy-mid);">
+    <div class="section-label">Our Approach</div>
+    <h2 class="section-title">How We Deliver Results</h2>
+    <div class="approach-steps">
+        <div class="step"><div class="step-num">01</div><strong>Understand</strong><br>Structured consultation to understand your objectives, constraints, timeline, and decisions needed.</div>
+        <div class="step"><div class="step-num">02</div><strong>Design</strong><br>We design the optimal methodology before any work begins.</div>
+        <div class="step"><div class="step-num">03</div><strong>Collect & Analyse</strong><br>Data gathered through field surveys, database analysis, interviews, or secondary research.</div>
+        <div class="step"><div class="step-num">04</div><strong>Deliver</strong><br>Findings presented in clear, actionable formats — reports, dashboards, or briefings.</div>
+        <div class="step"><div class="step-num">05</div><strong>Support</strong><br>We remain available to support implementation and update analysis as needed.</div>
+    </div>
+</section>
+
+<!-- COMMITMENT -->
+<section>
+    <div class="section-label">Our Commitment</div>
+    <h2 class="section-title">Standards We Uphold</h2>
+    <div class="section-desc">
+        <strong>Confidentiality:</strong> All client information is handled with strict confidentiality. Sensitive engagements governed by formal NDAs.<br><br>
+        <strong>Data Protection:</strong> Full compliance with Kenya's Data Protection Act, 2019. Field teams trained in informed consent.<br><br>
+        <strong>Independence:</strong> We provide honest, evidence-based analysis — not what clients want to hear.<br><br>
+        <strong>Professional Standards:</strong> Tax advisory complies with ICPAK standards. Research follows international ethics protocols.<br><br>
+        <strong>Accountability & Timeliness:</strong> Findings are verifiable. Delivery timelines are strictly respected.
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="section-label">Contact Us</div>
+    <h2 class="section-title">Ready to Turn Data Into Decisions?</h2>
+    <div class="section-desc" style="margin:0 auto 50px;">
+        Mon – Fri · 8:00 AM – 6:00 PM EAT<br>
+        📍 Crescent Business Centre, Parklands Rd, Westlands, Nairobi<br>
+        📬 P.O. Box 61877, 00200 — City Square, Nairobi<br><br>
+        📞 <strong>+254 702 585 876</strong><br>
+        ✉️ <strong>cosmosdatagrp@gmail.com</strong>
+    </div>
+
+    <form id="contactForm" style="max-width:580px; margin:0 auto; display:grid; gap:16px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+            <input type="text" placeholder="Your Name" required style="padding:15px; background:#0E1628; border:1px solid rgba(212,170,80,0.3); color:white;">
+            <input type="email" placeholder="Email Address" required style="padding:15px; background:#0E1628; border:1px solid rgba(212,170,80,0.3); color:white;">
+        </div>
+        <input type="text" placeholder="Company / Organisation" style="padding:15px; background:#0E1628; border:1px solid rgba(212,170,80,0.3); color:white;">
+        <textarea rows="6" placeholder="Tell us about your project or data needs..." required style="padding:15px; background:#0E1628; border:1px solid rgba(212,170,80,0.3); color:white; resize:vertical;"></textarea>
+        <button type="submit" class="btn btn-primary" style="width:100%; padding:18px;">Send Message</button>
+    </form>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    © 2026 Cosmos Data Group Ltd • Nairobi, Kenya<br>
+    Precision · Confidentiality · Speed · Independence · Integrity · Client-First
+</footer>
+
+<script>
+// Star Canvas
+const canvas = document.getElementById('stars-canvas');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+function initStars() {
+    stars = [];
+    for (let i = 0; i < 180; i++) {
+        stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 1.5 + 0.3,
+            speed: Math.random() * 0.015 + 0.005
+        });
+    }
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const time = Date.now() * 0.001;
+    stars.forEach(s => {
+        const alpha = 0.4 + 0.6 * Math.sin(time * s.speed + s.x);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(212, 170, 80, ${alpha})`;
+        ctx.fill();
+    });
+    requestAnimationFrame(draw);
+}
+
+window.addEventListener('resize', () => { resize(); initStars(); });
+resize();
+initStars();
+draw();
+
+// Form submission
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    alert("Thank you! Your message has been received. The Cosmos Data Group team will contact you shortly.");
+    this.reset();
+});
+</script>
+</body>
+</html>
